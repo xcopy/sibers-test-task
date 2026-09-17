@@ -4,10 +4,10 @@
     <?php foreach ($result['items'] as $item) : ?>
         <div class="col-md-6">
             <?php if (!empty($item['thumbnail'])) : ?>
-                <img src="<?= $item['thumbnail'] ?>" class="img-fluid rounded border d-block" alt="" style="height: 200px;">
+                <img src="<?= escape($item['thumbnail']) ?>" class="img-fluid rounded border d-block" alt="" style="height: 200px;">
             <?php endif; ?>
 
-            <a href="<?= $item['url'] ?>"><?= escape($item['title']) ?></a>
+            <a href="<?= escape($item['url']) ?>"><?= escape($item['title']) ?></a>
 
             <?php if (!empty($item['description'])) : ?>
                 <p><?= escape($item['description']) ?></p>

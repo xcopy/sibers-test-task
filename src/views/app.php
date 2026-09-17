@@ -35,7 +35,7 @@ function escape(string $value): string
         <select name="source" id="source" class="form-select">
           <option value="">-- Choose a source --</option>
           <?php foreach ($sources as $id => $name) : ?>
-            <option value="<?= $id ?>"<?= $source === $id ? ' selected' : '' ?>><?= $name ?></option>
+            <option value="<?= escape($id) ?>"<?= $source === $id ? ' selected' : '' ?>><?= escape($name) ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -46,7 +46,7 @@ function escape(string $value): string
   </form>
 
   <?php if ($error) : ?>
-    <div class="alert alert-info text-center"><?= $error ?></div>
+    <div class="alert alert-info text-center"><?= escape($error) ?></div>
   <?php endif; ?>
 
   <?php if ($result) : ?>
@@ -68,7 +68,7 @@ function escape(string $value): string
       <?php else : ?>
         <?php foreach ($result['items'] as $item) : ?>
           <div>
-            <a href="<?= $item['url'] ?>"><?= escape($item['title']) ?></a>
+            <a href="<?= escape($item['url']) ?>"><?= escape($item['title']) ?></a>
 
             <?php if (!empty($item['description'])) : ?>
               <p><?= escape($item['description']) ?></p>
