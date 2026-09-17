@@ -6,6 +6,7 @@ class DataSourceFactory
 {
     private static array $sources = [
         'devto' => DevtoDataSource::class,
+        'dummyjson' => DummyjsonDataSource::class,
     ];
 
     public static function getSources(): array

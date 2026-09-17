@@ -44,7 +44,7 @@ function buildPageUrl(string $source, int $page): string
   </form>
 
   <?php if ($error): ?>
-    <div class="alert alert-danger"><?= $error ?></div>
+    <div class="alert alert-info text-center"><?= $error ?></div>
   <?php endif; ?>
 
   <?php if ($result): ?>

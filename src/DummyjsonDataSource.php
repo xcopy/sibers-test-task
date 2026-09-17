@@ -2,23 +2,22 @@
 
 namespace Sibers;
 
-class DevtoDataSource extends DataSource
+class DummyjsonDataSource extends DataSource
 {
     public function getName(): string
     {
-        return 'DEV Community';
+        return 'DummyJSON';
     }
 
     public function getId(): string
     {
-        return 'devto';
+        return 'dummyjson';
     }
 
     public function getData(int $page, int $perPage): array
     {
-        $url = 'https://dev.to/api/articles?' . http_build_query([
-            'per_page' => 100,
-            'page' => 1,
+        $url = 'https://dummyjson.com/products?' . http_build_query([
+            'limit' => 100,
         ]);
 
         $json = $this->get($url);
@@ -28,6 +27,7 @@ class DevtoDataSource extends DataSource
             throw new \RuntimeException('Invalid response from ' . $this->getName() . ' API');
         }
 
+        $data = $data['products'] ?? [];
         $allItems = [];
 
         foreach ($data as $item) {
