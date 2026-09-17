@@ -16,15 +16,13 @@ class App
         $result = null;
         $error  = null;
 
-        if (isset($sources[$source])) {
+        if ($source !== '' && isset($sources[$source])) {
             try {
                 $result = DataSourceFactory::create($source)->getData($page, 10);
             } catch (\Throwable $e) {
                 $error = 'An error occurred while fetching data: ' . $e->getMessage();
             }
-        } elseif ($source === '') {
-            $error = 'Please select a data source.';
-        } else {
+        } elseif ($source !== '') {
             $error = 'Unknown data source selected.';
         }
 
