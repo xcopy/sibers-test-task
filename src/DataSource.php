@@ -9,12 +9,34 @@ abstract class DataSource implements DataSourceInterface
 {
     protected function get(string $url): string
     {
+        $cacheFile = __DIR__ . '/cache/' . md5($url) . '.json';
+
+        if (file_exists($cacheFile)) {
+            $cacheTime = filemtime($cacheFile);
+
+            // cache is valid for 5 minutes
+            if ($cacheTime !== false && (time() - $cacheTime) < 300) {
+                return file_get_contents($cacheFile);
+            }
+
+            // cache is expired, delete it
+            unlink($cacheFile);
+        }
+
         try {
             $client = new Client([
                 'headers' => ['accept' => 'application/json'],
             ]);
 
-            return (string) $client->get($url)->getBody();
+            // fetch the data from the API
+            $response = (string) $client->get($url)->getBody();
+
+            // save the response to cache
+            if (!file_exists($cacheFile)) {
+                file_put_contents($cacheFile, $response);
+            }
+
+            return $response;
         } catch (GuzzleException $e) {
             throw new \RuntimeException("Failed to fetch data from: $url. Reason: " . $e->getMessage(), 0, $e);
         }
