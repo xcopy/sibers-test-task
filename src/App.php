@@ -10,7 +10,7 @@ class App
     {
         $source = $_GET['source'] ?? null;
         $page = $_GET['page'] ?? 1;
-        $page = max($page, 1);
+        $page = max((int) $page, 1);
 
         $sources = DataSourceFactory::getSources();
         $result = null;
