@@ -46,7 +46,7 @@ function buildPageUrl(string $source, int $page): string
 
   <?php if ($result) : ?>
     <p>
-        Total items: <strong><?= $result['total'] ?></strong> |
+      Total items: <strong><?= $result['total'] ?></strong> |
       Page <strong><?= $result['page'] ?></strong>
       of <strong><?= $result['totalPages'] ?></strong>
     </p>
@@ -55,20 +55,31 @@ function buildPageUrl(string $source, int $page): string
       <p class="alert alert-info text-center">No items found for the current page.</p>
     <?php else : ?>
       <hr>
-      <?php foreach ($result['items'] as $item) : ?>
-        <div>
-          <a href="<?= $item['url'] ?>"><?= $item['title'] ?></a>
 
-          <?php if (!empty($item['description'])) : ?>
-            <p><?= $item['description'] ?></p>
-          <?php endif; ?>
-        </div>
-      <?php endforeach; ?>
+      <?php $viewFile = __DIR__ . '/' . $source . '.php' ?>
+
+      <?php if (file_exists($viewFile)) : ?>
+        <?php include $viewFile ?>
+      <?php else : ?>
+        <?php foreach ($result['items'] as $item) : ?>
+          <div>
+            <a href="<?= $item['url'] ?>"><?= $item['title'] ?></a>
+
+            <?php if (!empty($item['description'])) : ?>
+              <p><?= $item['description'] ?></p>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     <?php endif; ?>
 
     <?php if ($result['totalPages'] > 1) : ?>
       <hr>
       <nav class="pagination">
+        <span class="page-item">
+          <a href="<?= buildPageUrl($source, 1) ?>" class="page-link">First</a>
+        </span>
+
         <?php if ($result['page'] > 1) : ?>
           <span class="page-item">
             <a href="<?= buildPageUrl($source, $result['page'] - 1) ?>" class="page-link">Prev</a>
@@ -97,6 +108,10 @@ function buildPageUrl(string $source, int $page): string
             <a href="<?= buildPageUrl($source, $result['page'] + 1) ?>" class="page-link">Next</a>
           </span>
         <?php endif; ?>
+
+        <span class="page-item">
+          <a href="<?= buildPageUrl($source, $result['totalPages']) ?>" class="page-link">Last</a>
+        </span>
       </nav>
     <?php endif; ?>
   <?php endif; ?>
