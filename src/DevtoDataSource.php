@@ -24,28 +24,6 @@ class DevtoDataSource extends DataSource
         $json = $this->get($url);
         $data = json_decode($json, true);
 
-        if (!is_array($data)) {
-            throw new \RuntimeException('Invalid response from ' . $this->getName() . ' API');
-        }
-
-        $allItems = [];
-
-        foreach ($data as $item) {
-            if (!is_array($item) || empty($item['title'])) {
-                continue;
-            }
-
-            $allItems[] = [
-                'title' => $item['title'] ?? 'No title',
-                'url' => $item['url'] ?? '#',
-                'description' => $item['description'] ?? 'No description',
-            ];
-        }
-
-        $total = count($allItems);
-        $offset = ($page - 1) * $perPage;
-        $pageItems = array_slice($allItems, $offset, $perPage);
-
-        return $this->buildResult($pageItems, $total, $page, $perPage);
+        return $this->buildResult($data, $page, $perPage);
     }
 }

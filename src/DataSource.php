@@ -26,10 +26,39 @@ abstract class DataSource implements DataSourceInterface
         }
     }
 
-    protected function buildResult(array $items, int $total, int $page, int $perPage): array
+    protected function buildResult(mixed $data, int $page, int $perPage): array
     {
+        if (!is_array($data)) {
+            throw new \RuntimeException('Invalid response from ' . $this->getName() . ' API');
+        }
+
+        $allItems = [];
+
+        foreach ($data as $item) {
+            if (!is_array($item) || empty($item['title'])) {
+                continue;
+            }
+
+            $allItems[] = [
+                'title' => $item['title'] ?? 'No title',
+                'url' => $item['url'] ?? '#',
+                'description' => $item['description'] ?? 'No description',
+            ];
+        }
+
+        $total = count($allItems);
+
+        $offset = ($page - 1) * $perPage;
+
+        if ($offset >= $total) {
+            $offset = $total - $perPage;
+            $page = (int) ceil($total / $perPage);
+        }
+
         $totalPages = $total > 0 ? (int) ceil($total / $perPage) : 1;
         $totalPages = max(1, $totalPages);
+
+        $items = array_slice($allItems, $offset, $perPage);
 
         return compact('items', 'total', 'page', 'perPage', 'totalPages');
     }
