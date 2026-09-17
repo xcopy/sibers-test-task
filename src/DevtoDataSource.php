@@ -6,7 +6,7 @@ class DevtoDataSource extends DataSource
 {
     public function getName(): string
     {
-        return 'DEV Community';
+        return 'DEV Community Articles';
     }
 
     public function getId(): string

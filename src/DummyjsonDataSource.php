@@ -6,7 +6,7 @@ class DummyjsonDataSource extends DataSource
 {
     public function getName(): string
     {
-        return 'DummyJSON';
+        return 'DummyJSON Products';
     }
 
     public function getId(): string
