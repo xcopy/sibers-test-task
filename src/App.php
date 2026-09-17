@@ -26,11 +26,10 @@ class App
             $error = 'Unknown data source selected.';
         }
 
-        $viewFile = __DIR__ . '/views/app.php';
         $data = compact('sources', 'source', 'result', 'error');
 
         extract($data, EXTR_SKIP);
 
-        require $viewFile;
+        require __DIR__ . '/views/app.php';
     }
 }
