@@ -5,18 +5,18 @@ namespace Sibers;
 class DataSourceFactory
 {
     private static array $sources = [
-        'devto' => DevtoDataSource::class,
-        'dummyjson' => DummyjsonDataSource::class,
+        DevtoDataSource::class,
+        DummyjsonDataSource::class,
     ];
 
     public static function getSources(): array
     {
         $result = [];
 
-        foreach (self::$sources as $id => $class) {
+        foreach (self::$sources as $class) {
             /** @var DataSourceInterface $instance */
             $instance = new $class();
-            $result[$id] = $instance->getName();
+            $result[$instance->getId()] = $instance->getName();
         }
 
         return $result;
@@ -24,12 +24,15 @@ class DataSourceFactory
 
     public static function create(string $id): DataSourceInterface
     {
-        if (!isset(self::$sources[$id])) {
-            throw new \InvalidArgumentException("Unknown data source: $id");
+        foreach (self::$sources as $class) {
+            /** @var DataSourceInterface $instance */
+            $instance = new $class();
+
+            if ($instance->getId() === $id) {
+                return $instance;
+            }
         }
 
-        $class = self::$sources[$id];
-
-        return new $class();
+        throw new \InvalidArgumentException("Unknown data source: $id");
     }
 }
