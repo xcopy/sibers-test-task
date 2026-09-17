@@ -2,18 +2,32 @@
 
 namespace Sibers;
 
+/**
+ * Class DummyjsonDataSource
+ *
+ * This class represents a data source that fetches products from the DummyJSON API.
+ */
 class DummyjsonDataSource extends DataSource
 {
+    /**
+     * @inheritDoc
+     */
     public function getName(): string
     {
         return 'DummyJSON Products';
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getId(): string
     {
         return 'dummyjson';
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function processItems(array $data): array
     {
         $items = parent::processItems($data);
@@ -25,6 +39,9 @@ class DummyjsonDataSource extends DataSource
         return $items;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getData(int $page, int $perPage): array
     {
         $url = 'https://dummyjson.com/products?' . http_build_query([

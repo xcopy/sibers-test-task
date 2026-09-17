@@ -5,8 +5,21 @@ namespace Sibers;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
+/**
+ * Abstract class DataSource
+ *
+ * This class provides a base implementation for data sources that fetch data from external APIs.
+ */
 abstract class DataSource implements DataSourceInterface
 {
+    /**
+     * Fetches data from the given URL, using a cache to avoid repeated requests.
+     *
+     * @param string $url The URL to fetch data from.
+     * @throws \RuntimeException
+     *
+     * @return bool|string The response data as a string, or false on failure.
+     */
     protected function get(string $url): string
     {
         $cacheFile = __DIR__ . '/cache/' . md5($url) . '.json';
@@ -42,6 +55,14 @@ abstract class DataSource implements DataSourceInterface
         }
     }
 
+    /**
+     * Processes the raw data fetched from the API and extracts relevant items.
+     * This is implementation by default and can be overridden by subclasses to provide specific processing logic.
+     *
+     * @param array $data The raw data fetched from the API.
+     *
+     * @return array An array of processed items.
+     */
     protected function processItems(array $data): array
     {
         $items = [];
@@ -61,6 +82,15 @@ abstract class DataSource implements DataSourceInterface
         return $items;
     }
 
+    /**
+     * Builds the final result array with pagination information.
+     *
+     * @param mixed $data The processed data.
+     * @param int $page The current page number.
+     * @param int $perPage The number of items per page.
+     *
+     * @return array The final result array.
+     */
     protected function buildResult(mixed $data, int $page, int $perPage): array
     {
         if (!is_array($data)) {
