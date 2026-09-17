@@ -10,6 +10,11 @@ function buildPageUrl(string $source, int $page): string
     return '?' . http_build_query(compact('source', 'page'));
 }
 
+function escape(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
 ?>
 
 <!doctype html>
@@ -63,10 +68,10 @@ function buildPageUrl(string $source, int $page): string
       <?php else : ?>
         <?php foreach ($result['items'] as $item) : ?>
           <div>
-            <a href="<?= $item['url'] ?>"><?= $item['title'] ?></a>
+            <a href="<?= $item['url'] ?>"><?= escape($item['title']) ?></a>
 
             <?php if (!empty($item['description'])) : ?>
-              <p><?= $item['description'] ?></p>
+              <p><?= escape($item['description']) ?></p>
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
