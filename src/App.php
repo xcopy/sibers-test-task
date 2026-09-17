@@ -8,7 +8,7 @@ class App
 {
     public function run()
     {
-        $source = $_GET['source'] ?? null;
+        $source = $_GET['source'] ?? '';
         $page = $_GET['page'] ?? 1;
         $page = max((int) $page, 1);
 
@@ -22,6 +22,8 @@ class App
             } catch (\Throwable $e) {
                 $error = 'An error occurred while fetching data: ' . $e->getMessage();
             }
+        } elseif ($source === '') {
+            $error = 'Please select a data source.';
         } else {
             $error = 'Unknown data source selected.';
         }
