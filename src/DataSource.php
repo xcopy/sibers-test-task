@@ -7,20 +7,14 @@ use GuzzleHttp\Exception\GuzzleException;
 
 abstract class DataSource implements DataSourceInterface
 {
-    private Client $httpClient;
-
-    public function __construct()
-    {
-        $this->httpClient = new Client([
-            'headers' => ['accept' => 'application/json'],
-        ]);
-    }
-
     protected function get(string $url): string
     {
         try {
-            $response = $this->httpClient->get($url);
-            return (string) $response->getBody();
+            $client = new Client([
+                'headers' => ['accept' => 'application/json'],
+            ]);
+
+            return (string) $client->get($url)->getBody();
         } catch (GuzzleException $e) {
             throw new \RuntimeException("Failed to fetch data from: {$url}. Reason: " . $e->getMessage(), 0, $e);
         }
