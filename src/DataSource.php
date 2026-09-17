@@ -16,8 +16,27 @@ abstract class DataSource implements DataSourceInterface
 
             return (string) $client->get($url)->getBody();
         } catch (GuzzleException $e) {
-            throw new \RuntimeException("Failed to fetch data from: {$url}. Reason: " . $e->getMessage(), 0, $e);
+            throw new \RuntimeException("Failed to fetch data from: $url. Reason: " . $e->getMessage(), 0, $e);
         }
+    }
+
+    protected function processItems(array $data): array
+    {
+        $items = [];
+
+        foreach ($data as $item) {
+            if (!is_array($item) || empty($item['title'])) {
+                continue;
+            }
+
+            $items[] = [
+                'title' => $item['title'] ?? 'No title',
+                'url' => $item['url'] ?? '#',
+                'description' => $item['description'] ?? 'No description',
+            ];
+        }
+
+        return $items;
     }
 
     protected function buildResult(mixed $data, int $page, int $perPage): array
@@ -26,21 +45,9 @@ abstract class DataSource implements DataSourceInterface
             throw new \RuntimeException('Invalid response from ' . $this->getName() . ' API');
         }
 
-        $allItems = [];
+        $items = $this->processItems($data);
 
-        foreach ($data as $item) {
-            if (!is_array($item) || empty($item['title'])) {
-                continue;
-            }
-
-            $allItems[] = [
-                'title' => $item['title'] ?? 'No title',
-                'url' => $item['url'] ?? '#',
-                'description' => $item['description'] ?? 'No description',
-            ];
-        }
-
-        $total = count($allItems);
+        $total = count($items);
 
         $offset = ($page - 1) * $perPage;
 
@@ -52,7 +59,7 @@ abstract class DataSource implements DataSourceInterface
         $totalPages = $total > 0 ? (int) ceil($total / $perPage) : 1;
         $totalPages = max(1, $totalPages);
 
-        $items = array_slice($allItems, $offset, $perPage);
+        $items = array_slice($items, $offset, $perPage);
 
         return compact('items', 'total', 'page', 'perPage', 'totalPages');
     }

@@ -14,6 +14,17 @@ class DummyjsonDataSource extends DataSource
         return 'dummyjson';
     }
 
+    protected function processItems(array $data): array
+    {
+        $items = parent::processItems($data);
+
+        foreach ($items as $i => &$item) {
+            $item['thumbnail'] = $data[$i]['thumbnail'] ?? null;
+        }
+
+        return $items;
+    }
+
     public function getData(int $page, int $perPage): array
     {
         $url = 'https://dummyjson.com/products?' . http_build_query([
