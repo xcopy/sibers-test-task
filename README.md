@@ -2,7 +2,7 @@ A small PHP application that fetches and displays data from multiple external so
 
 **Installation**
 
-- Clone the project: `git clone git@github.com:xcopy/sibers-test-task.git`
+- Clone the project: `git clone https://github.com/xcopy/sibers-test-task.git xcopy-sibers-test-task`
 - Go to the project root
 - Install dependencies: `composer install`
 - Start a local PHP server:
